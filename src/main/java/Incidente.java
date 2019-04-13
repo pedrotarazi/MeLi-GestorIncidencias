@@ -1,7 +1,7 @@
 import java.util.Date;
 
 public class Incidente {
-    private int id;
+    private Integer id;
     private Clasificacion clasificacion;
     private String descripcion;
     private Usuario reportador;
@@ -10,11 +10,11 @@ public class Incidente {
     private Date fecha_creacion;
     private Date fecha_solucion;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

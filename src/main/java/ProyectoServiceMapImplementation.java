@@ -17,8 +17,13 @@ public class ProyectoServiceMapImplementation implements ProyectoService{
         else if (proyecto.getTitulo().equals("") || proyecto.getTitulo() == null){
             throw new Exception("Titulo invalido");
         }
-        else if (proyecto.getPropietario() == null){
-            throw new Exception("Usuario invalido");
+        else if (proyecto.getPropietario() == null || proyecto.getPropietario().equals("")){
+            throw new Exception("Propietario invalido");
+        }
+        else if (proyecto.getPropietario().getId() < 0 || proyecto.getPropietario().getId() == null ||
+            proyecto.getPropietario().getNombre() == null || proyecto.getPropietario().getNombre().equals("") ||
+            proyecto.getPropietario().getApellido() == null || proyecto.getPropietario().getApellido().equals("")){
+            throw new Exception("Propietario con datos no validos");
         }
         else{
             proyectoHashMap.put(proyecto.getId(), proyecto);
@@ -54,8 +59,18 @@ public class ProyectoServiceMapImplementation implements ProyectoService{
     }
 
     @Override
-    public void deleteProyecto(int id) {
-        proyectoHashMap.remove(id);
+    public boolean deleteProyecto(int id) throws Exception {
+        if (proyectoExist(id)){
+            if (proyectoHashMap.get(id).getIncidentes() == null){
+                return proyectoHashMap.remove(id) != null;
+            }
+            else{
+                throw new Exception("El proyecto tiene incidentes. No se puede eliminar");
+            }
+        }
+        else{
+            throw new Exception("El proyecto no existe");
+        }
     }
 
     @Override

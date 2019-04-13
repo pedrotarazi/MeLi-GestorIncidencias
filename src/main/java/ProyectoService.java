@@ -6,6 +6,6 @@ public interface ProyectoService {
     Collection<Proyecto> getProyectos();
     Proyecto getProyecto(int id);
     Proyecto editProyecto(Proyecto proyecto) throws Exception;
-    void deleteProyecto(int id);
+    boolean deleteProyecto(int id) throws Exception;
     boolean proyectoExist(int id);
 }

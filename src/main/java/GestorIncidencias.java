@@ -68,58 +68,120 @@ public class GestorIncidencias {
         // PROYECTO
         // Crear proyecto
         post("/proyecto", (request, response) -> {
-            return null;
+            response.type("application/json");
+            Proyecto proyecto = new Gson().fromJson(request.body(), Proyecto.class);
+            try {
+                proyectoService.addProyecto(proyecto);
+            }
+            catch (Exception e){
+                System.out.println(e);
+                return new Gson().toJson(new StandardResponse(StatusResponse.ERROR));
+            }
+            return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS));
         });
 
         // Obtener todos los proyectos
         get("/proyecto", (request, response) -> {
-            return null;
+            response.type("application/json");
+            return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
+                    new Gson().toJsonTree(proyectoService.getProyectos())));
         });
 
         // Obtener un proyecto
         get("/proyecto/:id", (request, response) -> {
-            return null;
+            response.type("application/json");
+            return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
+                    new Gson().toJsonTree(proyectoService.getProyecto(new Integer(request.params(":id"))))));
         });
 
         // Modificar un proyecto
         put("/proyecto", (request, response) -> {
-            return null;
+            response.type("application/json");
+            Proyecto proyecto = new Gson().fromJson(request.body(), Proyecto.class);
+            try{
+                Proyecto proyectoEdit = proyectoService.editProyecto(proyecto);
+                return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
+                        new Gson().toJson(proyectoEdit)));
+            }
+            catch (Exception e){
+                System.out.println(e);
+                return new Gson().toJson(new StandardResponse(StatusResponse.ERROR));
+            }
         });
 
         // Eliminar un proyecto
         delete("/proyecto/:id", (request, response) -> {
-            return null;
+            response.type("application/json");
+            try {
+                if (proyectoService.deleteProyecto(new Integer(request.params(":id")))) {
+                    return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS));
+                }
+            } catch (Exception e){
+                System.out.println(e);
+            }
+            return new Gson().toJson(new StandardResponse(StatusResponse.ERROR));
         });
 
         // INCIDENTE
         // Crear incidente
         post("/incidente", (request, response) -> {
-            return null;
+            response.type("application/json");
+            Incidente incidente = new Gson().fromJson(response.body(), Incidente.class);
+            try{
+                incidenteService.addIncidente(incidente);
+                return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS));
+            }
+            catch (Exception e){
+                System.out.println(e);
+                return new Gson().toJson(new StandardResponse(StatusResponse.ERROR));
+            }
         });
 
         // Obtener todos los incidentes
         get("/incidente", (request, response) -> {
-            return null;
+            response.type("application/json");
+            return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
+                    new Gson().toJsonTree(incidenteService.getIncidentes())));
         });
 
         //Obtener un incidente
         get("/incidente/:id", (request, response) -> {
-            return null;
+            response.type("application/json");
+            try {
+                return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
+                        new Gson().toJsonTree(incidenteService.getIncidente(new Integer(request.params(":id"))))));
+            }
+            catch (Exception e){
+                return new Gson().toJson(new StandardResponse(StatusResponse.ERROR));
+            }
         });
 
         // Cambiar estado
         put("/incidente/:id", (request, response) -> {
-            return null;
-        });
-
-        // Agregar descripcion
-        post("/incidente/:id", (request, response) -> {
-            return null;
+            response.type("application/json");
+            Incidente incidenteEdit = new Gson().fromJson(response.body(), Incidente.class);
+            try {
+                incidenteService.changeEstado(incidenteEdit);
+                return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
+                        new Gson().toJsonTree(incidenteService.getIncidente(new Integer(request.params(":id"))))));
+            }
+            catch (Exception e){
+                return new Gson().toJson(new StandardResponse(StatusResponse.ERROR));
+            }
         });
 
         // Cambiar descripcion
         put("/incidente/:id", (request, response) -> {
-            return null;
+            response.type("application/json");
+            Incidente incidenteEdit = new Gson().fromJson(response.body(), Incidente.class);
+            try {
+                incidenteService.editDescripcion(incidenteEdit);
+                return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
+                        new Gson().toJsonTree(incidenteService.getIncidente(new Integer(request.params(":id"))))));
+            }
+            catch (Exception e){
+                return new Gson().toJson(new StandardResponse(StatusResponse.ERROR));
+            }
         });
 
         //GENERALES

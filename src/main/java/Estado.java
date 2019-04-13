@@ -1,6 +1,6 @@
 public enum Estado {
 
-    ASIGNADO ("Asignador"),
+    ASIGNADO ("Asignado"),
     RESUELTO ("Resuelto");
 
     private String estado;
