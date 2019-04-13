@@ -1,16 +1,16 @@
 import java.util.ArrayList;
 
 public class Proyecto {
-    private int id;
+    private Integer id;
     private String titulo;
     private Usuario propietario;
     private ArrayList<Incidente> incidentes;
 
-    public int getId() {
-        return id;
-    }
+    public Proyecto(){ incidentes = new ArrayList<>(); }
 
-    public void setId(int id) {
+    public Integer getId() { return id; }
+
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -34,7 +34,7 @@ public class Proyecto {
         return incidentes;
     }
 
-    public void setIncidentes(ArrayList<Incidente> incidentes) {
-        this.incidentes = incidentes;
+    public void setIncidentes(Incidente incidente) {
+        incidentes.add(incidente);
     }
 }

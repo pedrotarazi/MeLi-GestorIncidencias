@@ -10,20 +10,21 @@ public class ProyectoServiceMapImplementation implements ProyectoService{
     }
 
     @Override
-    public void addProyecto(Proyecto proyecto) throws Exception{
-        if (proyecto.getId() < 0){
-            throw new Exception("Id invalido");
+    public void addProyecto(Proyecto proyecto) throws ProyectoException{
+        if (proyecto.getId() == null || proyecto.getId() < 0){
+            throw new ProyectoException("ID_ERROR");
         }
-        else if (proyecto.getTitulo().equals("") || proyecto.getTitulo() == null){
-            throw new Exception("Titulo invalido");
+        else if(proyectoExist(proyecto.getId())){
+            throw new ProyectoException("EXIST");
         }
-        else if (proyecto.getPropietario() == null || proyecto.getPropietario().equals("")){
-            throw new Exception("Propietario invalido");
+        else if (proyecto.getTitulo() == null || proyecto.getTitulo().equals("")){
+            throw new ProyectoException("NAME_ERROR");
         }
-        else if (proyecto.getPropietario().getId() < 0 || proyecto.getPropietario().getId() == null ||
-            proyecto.getPropietario().getNombre() == null || proyecto.getPropietario().getNombre().equals("") ||
-            proyecto.getPropietario().getApellido() == null || proyecto.getPropietario().getApellido().equals("")){
-            throw new Exception("Propietario con datos no validos");
+        else if (proyecto.getPropietario() == null || proyecto.getPropietario().equals("") ||
+                proyecto.getPropietario().getId() == null || proyecto.getPropietario().getId() < 0 ||
+                proyecto.getPropietario().getNombre() == null || proyecto.getPropietario().getNombre().equals("") ||
+                proyecto.getPropietario().getApellido() == null || proyecto.getPropietario().getApellido().equals("")){
+            throw new ProyectoException("PROPIETARIO_ERROR");
         }
         else{
             proyectoHashMap.put(proyecto.getId(), proyecto);
@@ -36,19 +37,30 @@ public class ProyectoServiceMapImplementation implements ProyectoService{
     }
 
     @Override
-    public Proyecto getProyecto(int id) {
-        return proyectoHashMap.get(id);
+    public Proyecto getProyecto(Integer id) throws ProyectoException {
+        if (id == null || id < 0){
+            throw new ProyectoException("ID_ERROR");
+        }
+        else if (proyectoExist(id)) {
+            return proyectoHashMap.get(id);
+        }
+        else{
+            throw new ProyectoException("NOT_EXIST");
+        }
     }
 
     @Override
-    public Proyecto editProyecto(Proyecto proyecto) throws Exception {
-        if (proyecto.getId() < 0){
-            throw new Exception("No existe el proyecto que desea editar");
+    public Proyecto editProyecto(Proyecto proyecto) throws ProyectoException {
+        if (proyecto.getId() == null || proyecto.getId() < 0){
+            throw new ProyectoException("ID_ERROR");
         }
         else{
             Proyecto proyectoEditar = proyectoHashMap.get(proyecto.getId());
-            if (proyecto.getTitulo().equals("") || proyecto.getPropietario() == null){
-                throw new Exception("Titulo o Propieta invalido");
+            if (proyecto.getPropietario() == null || proyecto.getPropietario().equals("")){
+                throw new ProyectoException("PROPIETARIO_ERROR");
+            }
+            else if (proyecto.getTitulo() == null || proyecto.getTitulo().equals("")){
+                throw new ProyectoException("NAME_ERROR");
             }
             else{
                 proyectoEditar.setTitulo(proyecto.getTitulo());
@@ -59,22 +71,22 @@ public class ProyectoServiceMapImplementation implements ProyectoService{
     }
 
     @Override
-    public boolean deleteProyecto(int id) throws Exception {
+    public boolean deleteProyecto(Integer id) throws ProyectoException {
         if (proyectoExist(id)){
             if (proyectoHashMap.get(id).getIncidentes() == null){
                 return proyectoHashMap.remove(id) != null;
             }
             else{
-                throw new Exception("El proyecto tiene incidentes. No se puede eliminar");
+                throw new ProyectoException("NOT_REMOVE");
             }
         }
         else{
-            throw new Exception("El proyecto no existe");
+            throw new ProyectoException("NOT_EXIST");
         }
     }
 
     @Override
-    public boolean proyectoExist(int id) {
+    public boolean proyectoExist(Integer id) {
         return proyectoHashMap.containsKey(id);
     }
 }

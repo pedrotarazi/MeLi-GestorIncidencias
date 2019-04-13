@@ -2,7 +2,16 @@ public enum StatusResponse {
 
     SUCCESS ("Success"),
     ERROR ("Error"),
-    EXIST ("Ya existe");
+    EXIST ("Exist"),
+    NOT_EXIST ("Not exist"),
+    ID_ERROR ("ID invalid"),
+    NAME_ERROR ("Name invalid"),
+    PROPIETARIO_ERROR ("Propietario invalid"),
+    NOT_REMOVE ("Not removed"),
+    CLASIFICACION_ERROR ("Clasificacion invalid"),
+    ESTADO_ERROR ("Estado invald"),
+    DATE_ERROR ("Date invalid"),
+    USUARIO_ERROR ("Usuario invalid");
 
     private String status;
 

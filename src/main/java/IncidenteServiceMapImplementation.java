@@ -12,30 +12,30 @@ public class IncidenteServiceMapImplementation implements IncidenteService{
     }
 
     @Override
-    public void addIncidente(Incidente incidente) throws Exception{
-        if (incidenteExist(incidente) || incidente.getId() < 0 || incidente.getId() == null){
-            throw new Exception("Id invalido");
+    public void addIncidente(Incidente incidente) throws IncidenteException{
+        if (incidente.getId() == null || incidente.getId() < 0 ){
+            throw new IncidenteException("ID_ERROR");
         }
-        else if (incidente.getClasificacion() == null || incidente.getClasificacion() != Clasificacion.CRITICO ||
-            incidente.getClasificacion() != Clasificacion.NORMAL ||
-                incidente.getClasificacion() != Clasificacion.MENOR){
-            throw new Exception("Falta clasificacion o es invalida (debe ser CRITICO, NORMAL o MENOR");
+        else if (incidenteExist(incidente.getId())){
+            throw new IncidenteException("EXIST");
+        }
+        else if (incidente.getClasificacion() == null || ( incidente.getClasificacion() != Clasificacion.CRITICO &&
+            incidente.getClasificacion() != Clasificacion.NORMAL && incidente.getClasificacion() != Clasificacion.MENOR)){
+            throw new IncidenteException("CLASIFICACION_ERROR");
         }
         else if (incidente.getDescripcion() == null){
-            throw new Exception("Falta campo descripcion");
+            throw new IncidenteException("NAME_ERROR");
         }
-        else if (incidente.getReportador().getId() < 0 || incidente.getReportador().getId() == null){
-            throw new Exception("Id de Reportador invalido");
+        else if (incidente.getReportador().getId() == null || incidente.getReportador().getId() < 0 ||
+                incidente.getResponsable().getId() == null || incidente.getResponsable().getId() < 0){
+            throw new IncidenteException("USUARIO_ERROR");
         }
-        else if (incidente.getResponsable().getId() < 0 || incidente.getResponsable().getId() == null){
-            throw new Exception("Id de Responsable invalido");
-        }
-        else if (incidente.getEstado() == null || incidente.getEstado() != Estado.ASIGNADO ||
-            incidente.getEstado() != Estado.RESUELTO){
-            throw new Exception("Falta estado o es invalido (ASIGADO o RESUELTO");
+        else if (incidente.getEstado() == null || (incidente.getEstado() != Estado.ASIGNADO &&
+            incidente.getEstado() != Estado.RESUELTO)){
+            throw new IncidenteException("ESTADO_ERROR");
         }
         else if (incidente.getFecha_creacion() == null || incidente.getFecha_solucion() == null){
-            throw new Exception("Fecha incorrecta");
+            throw new IncidenteException("DATE_ERROR");
         }
         else{
             incidenteHashMap.put(incidente.getId(), incidente);
@@ -48,18 +48,26 @@ public class IncidenteServiceMapImplementation implements IncidenteService{
     }
 
     @Override
-    public Incidente getIncidente(int id) {
-        return incidenteHashMap.get(id);
+    public Incidente getIncidente(Integer id) throws IncidenteException {
+        if (id == null || id < 0){
+            throw new IncidenteException("ID_ERROR");
+        }
+        if (!incidenteExist(id)){
+            throw new IncidenteException("NOT_EXIST");
+        }
+        else{
+            return incidenteHashMap.get(id);
+        }
     }
 
     @Override
-    public void changeEstado(Incidente incidente) throws Exception {
-        if (incidente.getEstado() == null || incidente.getEstado() != Estado.ASIGNADO ||
-                incidente.getEstado() != Estado.RESUELTO) {
-            throw new Exception("Estado invalido");
+    public void changeEstado(Incidente incidente) throws IncidenteException {
+        if (incidente.getEstado() == null || (incidente.getEstado() != Estado.ASIGNADO &&
+                incidente.getEstado() != Estado.RESUELTO)) {
+            throw new IncidenteException("ESTADO_ERROR");
         }
-        else if (incidenteExist(incidente)){
-            throw new Exception("Incidente inexistente");
+        else if (!incidenteExist(incidente.getId())){
+            throw new IncidenteException("NOT_EXIST");
         }
         else{
             Incidente incidenteEdit = incidenteHashMap.get(incidente.getId());
@@ -68,15 +76,16 @@ public class IncidenteServiceMapImplementation implements IncidenteService{
     }
 
     @Override
-    public void editDescripcion(Incidente incidente) throws Exception{
+    public void editDescripcion(Incidente incidente) throws IncidenteException{
         if (incidente.getDescripcion() == null){
-            throw new Exception("Descripcion invalida");
+            throw new IncidenteException("NAME_ERROR");
         }
         incidenteHashMap.get(incidente.getId()).setDescripcion(incidente.getDescripcion());
     }
 
     @Override
-    public boolean incidenteExist(Incidente incidente){
-        return incidenteHashMap.get(incidente.getId()) != null;
+    public boolean incidenteExist(Integer id){
+        return incidenteHashMap.get(id) != null;
     }
+
 }

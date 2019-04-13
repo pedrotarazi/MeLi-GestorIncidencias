@@ -1,5 +1,3 @@
-import com.sun.xml.internal.ws.api.message.ExceptionHasMessage;
-
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -12,15 +10,17 @@ public class UsuarioServiceMapImplementation implements UsuarioService {
     }
 
     @Override
-    public void addUsuario(Usuario usuario) throws Exception{
-        if (usuario.getId() == null || usuario.getId() < 0 || usuarioExist(usuario.getId())){
-            throw new Exception("Id invalido o ya existente");
+    public void addUsuario(Usuario usuario) throws UsuarioException{
+
+        if (usuario.getId() == null || usuario.getId() < 0){
+            throw new UsuarioException("ID");
         }
-        else if (usuario.getNombre().equals("") || usuario.getNombre() == null){
-            throw new Exception("Nombre invalido");
+        else if (usuarioExist(usuario.getId())){
+            throw new UsuarioException("EXIST");
         }
-        else if (usuario.getApellido().equals("") || usuario.getApellido() == null){
-            throw new Exception("Apellido invalido");
+        else if (usuario.getNombre() == null || usuario.getNombre().equals("") ||
+            usuario.getApellido() == null || usuario.getApellido().equals("")){
+            throw new UsuarioException("NAME_ERROR");
         }
         else{
             usuarioHashMap.put(usuario.getId(), usuario);
@@ -33,19 +33,31 @@ public class UsuarioServiceMapImplementation implements UsuarioService {
     }
 
     @Override
-    public Usuario getUsuario(int id) {
-        return usuarioHashMap.get(id);
+    public Usuario getUsuario(Integer id) throws UsuarioException {
+        if (id == null || id < 0){
+            throw new UsuarioException("ID_ERROR");
+        }
+        else if (usuarioExist(id)){
+            return usuarioHashMap.get(id);
+        }
+        else{
+            throw new UsuarioException("NOT_EXIST");
+        }
     }
 
     @Override
-    public Usuario editUsuario(Usuario usuario) throws Exception {
-        if (usuario.getId() == null || usuario.getId() < 0 || usuarioExist(usuario.getId())){
-            throw new Exception("No existe el usuario que desea editar");
+    public Usuario editUsuario(Usuario usuario) throws UsuarioException {
+        if (usuario.getId() == null || usuario.getId() < 0) {
+            throw new UsuarioException("ID_ERROR");
+        }
+        else if (!usuarioExist(usuario.getId())){
+            throw new UsuarioException("NOT_EXIST");
         }
         else{
             Usuario usuarioEditar = usuarioHashMap.get(usuario.getId());
-            if (usuario.getNombre() == null || usuario.getApellido() == null){
-                throw new Exception("Debe especificar un nombre y/o apellido");
+            if (usuario.getNombre() == null || usuario.getApellido() == null ||
+                usuario.getNombre().equals("") ||usuario.getApellido().equals("")){
+                throw new UsuarioException("NAME_ERROR");
             }
             else{
                 usuarioEditar.setNombre(usuario.getNombre());
@@ -56,8 +68,13 @@ public class UsuarioServiceMapImplementation implements UsuarioService {
     }
 
     @Override
-    public boolean deleteUsuario(int id) {
-        return usuarioHashMap.remove(id) != null;
+    public void deleteUsuario(Integer id) throws UsuarioException{
+        if (usuarioExist(id)) {
+            usuarioHashMap.remove(id);
+        }
+        else{
+            throw new UsuarioException("NOT_EXIST");
+        }
     }
 
     @Override

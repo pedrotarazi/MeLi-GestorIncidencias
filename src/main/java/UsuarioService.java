@@ -4,8 +4,8 @@ public interface UsuarioService {
 
     void addUsuario(Usuario usuario) throws Exception;
     Collection<Usuario> getUsuarios();
-    Usuario getUsuario(int id);
+    Usuario getUsuario(Integer id) throws UsuarioException;
     Usuario editUsuario(Usuario usuario) throws Exception;
-    boolean deleteUsuario(int id);
+    void deleteUsuario(Integer id) throws UsuarioException;
     boolean usuarioExist(int id);
 }

@@ -2,10 +2,10 @@ import java.util.Collection;
 
 public interface IncidenteService {
 
-    void addIncidente(Incidente incidente) throws Exception;
+    void addIncidente(Incidente incidente) throws IncidenteException;
     Collection<Incidente> getIncidentes();
-    Incidente getIncidente(int id);
-    void changeEstado(Incidente incidente) throws Exception;
-    void editDescripcion(Incidente incidente) throws Exception;
-    boolean incidenteExist(Incidente incidente);
+    Incidente getIncidente(Integer id) throws IncidenteException;
+    void changeEstado(Incidente incidente) throws IncidenteException;
+    void editDescripcion(Incidente incidente) throws IncidenteException;
+    boolean incidenteExist(Integer id);
 }
