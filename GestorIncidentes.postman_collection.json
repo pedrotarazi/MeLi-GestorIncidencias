@@ -1,0 +1,1476 @@
+{
+	"info": {
+		"_postman_id": "e8f97af7-b01f-4315-9c69-a6e1f1b4112c",
+		"name": "GestorIncidentes",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "USUARIO",
+			"item": [
+				{
+					"name": "Agregar usuario",
+					"item": [
+						{
+							"name": "Agregar usuario",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "f6366c74-d0f6-4005-8069-f0d1962224a4",
+										"exec": [
+											"pm.test(\"USUARIO AGREGADO\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"SUCCESS\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\t\"id\": 3,\n        \"nombre\": \"Pedro Esequiel\",\n        \"apellido\": \"Tarazi\"\n}\n"
+								},
+								"url": {
+									"raw": "http://localhost:4567/usuario",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4567",
+									"path": [
+										"usuario"
+									]
+								},
+								"description": "Se agrega un usuario con datos correctos"
+							},
+							"response": []
+						},
+						{
+							"name": "Agregar usuario duplicado",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "f6366c74-d0f6-4005-8069-f0d1962224a4",
+										"exec": [
+											"/*",
+											"pm.test(\"USUARIO YA EXISTE\", function () {",
+											"    pm.sendRequest({",
+											"        url: \"http://localhost:4567/usuario\",",
+											"        method: \"POST\",",
+											"        headers: {},",
+											"        body: {",
+											"            mode: \"raw\",",
+											"            raw: {",
+											"                id: 15,",
+											"                nombre: \"Sergio\",",
+											"                apellido: \"Agüero\"",
+											"            }",
+											"        }",
+											"    }, function (err, res) {",
+											"            console.log(res.json());",
+											"            pm.expect(res.status).to.eql(\"EXIST\");",
+											"    });",
+											"});*/"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\t\"id\": 0,\n        \"nombre\": \"Pedro Esequiel\",\n        \"apellido\": \"Tarazi\"\n}\n"
+								},
+								"url": {
+									"raw": "http://localhost:4567/usuario",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4567",
+									"path": [
+										"usuario"
+									]
+								},
+								"description": "Se agrega un usuario con datos correctos pero que ya existe"
+							},
+							"response": []
+						},
+						{
+							"name": "Agregar usuario con error",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "f6366c74-d0f6-4005-8069-f0d1962224a4",
+										"exec": [
+											"pm.test(\"FALTA ID\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"ID_ERROR\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n        \"nombre\": \"Pedro Esequiel\",\n        \"apellido\": \"Tarazi\"\n}\n"
+								},
+								"url": {
+									"raw": "http://localhost:4567/usuario",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4567",
+									"path": [
+										"usuario"
+									]
+								},
+								"description": "Se agrega un usuario sin ID"
+							},
+							"response": []
+						},
+						{
+							"name": "Agregar usuario sin nombre",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "f6366c74-d0f6-4005-8069-f0d1962224a4",
+										"exec": [
+											"pm.test(\"FALTA NOMBRE\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"NAME_ERROR\");",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"id\": 4,\n    \"apellido\": \"Tarazi\"\n}\n"
+								},
+								"url": {
+									"raw": "http://localhost:4567/usuario",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4567",
+									"path": [
+										"usuario"
+									]
+								},
+								"description": "Se agrega un usuario sin ID"
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Mostrar usuarios",
+					"item": [
+						{
+							"name": "Mostrar todos los usuarios",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "33917393-235e-446d-a105-4d98c40c8ed4",
+										"exec": [
+											"pm.test(\"OBTENER TODOS LOS USUARIOS\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"SUCCESS\");",
+											"});",
+											"",
+											"",
+											"pm.test(\"HAY 4 USUARIOS\", function() {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.data.length).to.eql(4);",
+											"})",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:4567/usuario",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4567",
+									"path": [
+										"usuario"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Mostrar usuario existente",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "78ef4a27-1dc3-49ca-b44b-9b2b363ff7ad",
+										"exec": [
+											"pm.test(\"OBTENER USUARIO EXISTENTE\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"SUCCESS\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:4567/usuario/0",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4567",
+									"path": [
+										"usuario",
+										"0"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Mostrar usuario inexistente",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "78ef4a27-1dc3-49ca-b44b-9b2b363ff7ad",
+										"exec": [
+											"pm.test(\"OBTENER USUARIO EXISTENTE\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"NOT_EXIST\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:4567/usuario/14",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4567",
+									"path": [
+										"usuario",
+										"14"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Modificar usuario",
+					"item": [
+						{
+							"name": "Modificar usuario",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "df3df0cb-94d0-48c1-b4c4-935c173a274c",
+										"exec": [
+											"pm.test(\"USUARIO MODIFICADO\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"SUCCESS\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"id\": 1,\n\t\"nombre\": \"Mercado\",\n\t\"apellido\": \"Libre\"\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4567/usuario",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4567",
+									"path": [
+										"usuario"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Modificar usuario inexistente",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "df3df0cb-94d0-48c1-b4c4-935c173a274c",
+										"exec": [
+											"pm.test(\"USUARIO A MODIFICAR NO EXISTE\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"NOT_EXIST\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"id\": 5,\n\t\"nombre\": \"Mercado\",\n\t\"apellido\": \"Libre\"\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4567/usuario",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4567",
+									"path": [
+										"usuario"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Eliminar usuario",
+					"item": [
+						{
+							"name": "Eliminar usuario",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "e6f13c28-a226-43af-a08f-31fe6bdc3e8d",
+										"exec": [
+											"pm.test(\"USUARIO ELIMINADO\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"SUCCESS\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:4567/usuario/3",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4567",
+									"path": [
+										"usuario",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Eliminar usuario propietario/responsable/reportador",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "98fe8da8-f572-485c-b4f1-a4fc68145cc7",
+										"exec": [
+											"pm.test(\"NO SE PUEDE ELIMINAR EL USUARIO\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"NOT_REMOVE\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:4567/usuario/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4567",
+									"path": [
+										"usuario",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			]
+		},
+		{
+			"name": "PROYECTO",
+			"item": [
+				{
+					"name": "Agregar proyecto",
+					"item": [
+						{
+							"name": "Agregar Proyecto",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "eedbdef1-ebf5-4076-88b4-1967ddcf4df4",
+										"exec": [
+											"pm.test(\"PROYECTO AGREGADO\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"SUCCESS\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"id\": 2,\n\t\"titulo\": \"Proyecto 2\",\n\t\"propietario\": {\n\t\t\"id\": 0,\n\t\t\"nombre\": \"Pedro\",\n\t\t\"apellido\": \"Tarazi\"\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4567/proyecto",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4567",
+									"path": [
+										"proyecto"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Agregar Proyecto existente",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "eedbdef1-ebf5-4076-88b4-1967ddcf4df4",
+										"exec": [
+											"pm.test(\"PROYECTO YA EXISTE\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"EXIST\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"id\": 0,\n\t\"titulo\": \"Proyecto 2\",\n\t\"propietario\": {\n\t\t\"id\": 0,\n\t\t\"nombre\": \"Pedro\",\n\t\t\"apellido\": \"Tarazi\"\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4567/proyecto",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4567",
+									"path": [
+										"proyecto"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Agregar Proyecto con error",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "eedbdef1-ebf5-4076-88b4-1967ddcf4df4",
+										"exec": [
+											"pm.test(\"PROYECTO SIN NOMBRE\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"NAME_ERROR\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"id\": 4,\n\t\"propietario\": {\n\t\t\"id\": 0,\n\t\t\"nombre\": \"Pedro\",\n\t\t\"apellido\": \"Tarazi\"\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4567/proyecto",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4567",
+									"path": [
+										"proyecto"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Agregar Proyecto sin propietario",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "eedbdef1-ebf5-4076-88b4-1967ddcf4df4",
+										"exec": [
+											"pm.test(\"PROYECTO YA EXISTE\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"PROPIETARIO_ERROR\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"id\": 6,\n\t\"titulo\": \"Proyecto 6\"\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4567/proyecto",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4567",
+									"path": [
+										"proyecto"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Mostrar proyectos",
+					"item": [
+						{
+							"name": "Mostrar todos los proyectos",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "33917393-235e-446d-a105-4d98c40c8ed4",
+										"exec": [
+											"pm.test(\"MOSTRAR PROYECTOS\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"SUCCESS\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:4567/proyecto",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4567",
+									"path": [
+										"proyecto"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Mostrar proyecto existente",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "78ef4a27-1dc3-49ca-b44b-9b2b363ff7ad",
+										"exec": [
+											"pm.test(\"OBTENER PROYECTO EXISTENTE\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"SUCCESS\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:4567/proyecto/0",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4567",
+									"path": [
+										"proyecto",
+										"0"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Mostrar usuario inexistente",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "78ef4a27-1dc3-49ca-b44b-9b2b363ff7ad",
+										"exec": [
+											"pm.test(\"OBTENER PROYECTO INEXISTENTE\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"NOT_EXIST\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:4567/proyecto/14",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4567",
+									"path": [
+										"proyecto",
+										"14"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Modificar proyecto",
+					"item": [
+						{
+							"name": "Modificar proyecto",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "34e2fe28-f036-4f98-a3be-e1c569c68e95",
+										"exec": [
+											"pm.test(\"Your test name\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"SUCCESS\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"id\": 0,\n    \"titulo\": \"Proyecto 0\",\n    \"propietario\": {\n\t    \"id\": 0,\n\t    \"nombre\": \"Pedro Esequiel\",\n\t    \"apellido\": \"Tarazi\"\n\t}\n}\t"
+								},
+								"url": {
+									"raw": "http://localhost:4567/proyecto",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4567",
+									"path": [
+										"proyecto"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Modificar proyecto inexistente",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "815c67c1-c5a2-47f4-a59d-fceb47ff5f22",
+										"exec": [
+											"pm.test(\"PROYECTO INEXISTENTE\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"NOT_EXIST\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"id\": 3,\n    \"titulo\": \"Proyecto 0\",\n    \"propietario\": {\n\t    \"id\": 0,\n\t    \"nombre\": \"Pedro Esequiel\",\n\t    \"apellido\": \"Tarazi\"\n\t}\n}\t"
+								},
+								"url": {
+									"raw": "http://localhost:4567/proyecto",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4567",
+									"path": [
+										"proyecto"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Eliminar proyecto",
+					"item": [
+						{
+							"name": "Eliminar proyecto",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2c5afffa-9c83-4f57-987c-266278c1f5a6",
+										"exec": [
+											"pm.test(\"PROYECTO ELIMINADO\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"SUCCESS\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:4567/proyecto/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4567",
+									"path": [
+										"proyecto",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Elimnar proyecto con incidentes",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "ac6b55cd-41b6-4a18-8101-30d603b0444d",
+										"exec": [
+											"pm.test(\"NO SE PUEDE ELIMINAR\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"NOT_REMOVE\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:4567/proyecto/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4567",
+									"path": [
+										"proyecto",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			]
+		},
+		{
+			"name": "INCIDENTE",
+			"item": [
+				{
+					"name": "Agregar incidente",
+					"item": [
+						{
+							"name": "Agregar incidente",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "831dff1b-d150-4cb7-b32c-2537de829d5b",
+										"exec": [
+											"pm.test(\"INCIDENTE AGREGADO\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"SUCCESS\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"id\": 2,\n    \"clasificacion\": \"CRITICO\",\n    \"descripcion\": \"Incidente normal 2\",\n    \"reportador\": {\n        \"id\": 2,\n        \"nombre\": \"Diego\",\n        \"apellido\": \"Maradona\"\n    },\n    \"responsable\": {\n        \"id\": 0,\n        \"nombre\": \"Pedro\",\n        \"apellido\": \"Tarazi\"\n    },\n    \"estado\": \"ASIGNADO\",\n    \"fecha_creacion\": \"Jan 2, 2019 12:00:00 AM\",\n\t\"fecha_solucion\": \"Apr 13, 2019 10:47:18 PM\"\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4567/incidente",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4567",
+									"path": [
+										"incidente"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Mostrar incidente",
+					"item": [
+						{
+							"name": "Mostrar todos los incidentes",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "a0ab5557-3a58-4eae-873c-de9b7e29b6f8",
+										"exec": [
+											"pm.test(\"MOSTRAR INCIDENTES\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"SUCCESS\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:4567/incidente",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4567",
+									"path": [
+										"incidente"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Modificar incidente",
+					"item": [
+						{
+							"name": "Modificar estado",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "30139935-2f37-470a-96ac-adfce99f668b",
+										"exec": [
+											"pm.test(\"ESTADO CAMBIADO A RESUELTO\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"SUCCESS\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"estado\": \"RESUELTO\"\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4567/incidente/estado/0",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4567",
+									"path": [
+										"incidente",
+										"estado",
+										"0"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Modificar estado erroneo",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "30139935-2f37-470a-96ac-adfce99f668b",
+										"exec": [
+											"pm.test(\"ESTADO INCORRECTO\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"ESTADO_ERROR\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"estado\": \"ASIGNADO\"\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4567/incidente/estado/0",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4567",
+									"path": [
+										"incidente",
+										"estado",
+										"0"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Modificar descripcion",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "30139935-2f37-470a-96ac-adfce99f668b",
+										"exec": [
+											"pm.test(\"DESCRIPCION MODIFICADA\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.status).to.eql(\"SUCCESS\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"descripcion\": \"Descripcion modificada\"\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4567/incidente/descripcion/0",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4567",
+									"path": [
+										"incidente",
+										"descripcion",
+										"0"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			]
+		},
+		{
+			"name": "Mostrar proyectos usuario propietario",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b7a09134-a1a1-4095-9806-46883988abea",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:4567/proyectos/propietario/0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4567",
+					"path": [
+						"proyectos",
+						"propietario",
+						"0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Mostrar incidentes usuario responsable",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e05c4122-9f24-4401-85b2-4d7c948099e7",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:4567/incidentes/responsable/0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4567",
+					"path": [
+						"incidentes",
+						"responsable",
+						"0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Mostrar incidentes usuario reportador",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a2c71f95-96b9-417e-8fcf-22e41a49f8b9",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:4567/incidentes/reportador/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4567",
+					"path": [
+						"incidentes",
+						"reportador",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Mostrar incidentes de un proyecto",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9b4ce43c-14fc-428f-bc1c-ce4ceb554a53",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:4567/incidentes/proyecto/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4567",
+					"path": [
+						"incidentes",
+						"proyecto",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Mostrar incidentes abiertos/cerrados",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "4ae0ed38-780b-455d-b524-d50b8fd13074",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:4567/incidentes/ASIGNADO",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4567",
+					"path": [
+						"incidentes",
+						"ASIGNADO"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
