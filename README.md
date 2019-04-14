@@ -20,4 +20,5 @@ cerrados).
 El archivo "GestorIncidentes.postman_collection.json" es una coleccion de Postman. 
 El archivo se debe importar con Postman para poder realizar las pruebas.
 En la imagen que se muestra a continuacion, se puede ver que todas las pruebas fueron exitosas.
+
 ![Imagen](https://i.ibb.co/WHFjb1c/Captura-de-Pantalla-2019-04-14-a-la-s-17-09-54.png)
