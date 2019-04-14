@@ -1,8 +1,8 @@
 public enum Clasificacion {
 
-    CRITICO ("Critico"),
-    NORMAL ("Normal"),
-    MENOR ("Menor");
+    CRITICO ("CRITICO"),
+    NORMAL ("NORMAL"),
+    MENOR ("MENOR");
 
     private String clasificacion;
 

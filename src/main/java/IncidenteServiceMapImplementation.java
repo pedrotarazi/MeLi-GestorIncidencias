@@ -1,5 +1,3 @@
-import sun.misc.ExtensionInstallationException;
-
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -61,9 +59,8 @@ public class IncidenteServiceMapImplementation implements IncidenteService{
     }
 
     @Override
-    public void changeEstado(Incidente incidente) throws IncidenteException {
-        if (incidente.getEstado() == null || (incidente.getEstado() != Estado.ASIGNADO &&
-                incidente.getEstado() != Estado.RESUELTO)) {
+    public Incidente changeEstado(Incidente incidente) throws IncidenteException {
+        if (incidente.getEstado() == null || (incidente.getEstado() != Estado.RESUELTO)) {
             throw new IncidenteException("ESTADO_ERROR");
         }
         else if (!incidenteExist(incidente.getId())){
@@ -72,6 +69,7 @@ public class IncidenteServiceMapImplementation implements IncidenteService{
         else{
             Incidente incidenteEdit = incidenteHashMap.get(incidente.getId());
             incidenteEdit.setEstado(incidente.getEstado());
+            return incidenteEdit;
         }
     }
 
@@ -88,4 +86,52 @@ public class IncidenteServiceMapImplementation implements IncidenteService{
         return incidenteHashMap.get(id) != null;
     }
 
+    @Override
+    public Collection<Incidente> getIncidentesResponsable(Integer id) throws IncidenteException{
+        HashMap<Integer, Incidente> incidentes = new HashMap<>();
+        for(int i=0; i < incidenteHashMap.size(); i++){
+            if(incidenteHashMap.get(i).getResponsable().getId().intValue() == id){
+                incidentes.put(i, incidenteHashMap.get(i));
+            }
+        }
+
+        if(incidentes.isEmpty()){
+            throw new IncidenteException("USUARIO_ERROR");
+        }
+        else{
+            return incidentes.values();
+        }
+    }
+
+    @Override
+    public Collection<Incidente> getIncidentesReportador(Integer id) throws IncidenteException{
+        HashMap<Integer, Incidente> incidentes = new HashMap<>();
+        for(int i=0; i < incidenteHashMap.size(); i++){
+            if(incidenteHashMap.get(i).getReportador().getId().intValue() == id){
+                incidentes.put(i, incidenteHashMap.get(i));
+            }
+        }
+
+        if(incidentes.isEmpty()){
+            throw new IncidenteException("USUARIO_ERROR");
+        }
+        else{
+            return incidentes.values();
+        }
+    }
+
+    @Override
+    public Collection<Incidente> getIncidentesAsignado(String estado) throws IncidenteException{
+        HashMap<Integer, Incidente> incidentes = new HashMap<>();
+        for(int i=0; i < incidenteHashMap.size(); i++){
+            if(incidenteHashMap.get(i).getEstado().getEstado().equals(estado)){
+                incidentes.put(i, incidenteHashMap.get(i));
+            }
+        }
+
+        if(incidentes.isEmpty()){
+            throw new IncidenteException("ESTADO_ERROR");
+        }
+        return incidentes.values();
+    }
 }

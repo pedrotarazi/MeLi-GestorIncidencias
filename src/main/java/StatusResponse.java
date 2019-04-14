@@ -11,7 +11,8 @@ public enum StatusResponse {
     CLASIFICACION_ERROR ("Clasificacion invalid"),
     ESTADO_ERROR ("Estado invald"),
     DATE_ERROR ("Date invalid"),
-    USUARIO_ERROR ("Usuario invalid");
+    USUARIO_ERROR ("Usuario invalid"),
+    NO_INCIDENT ("Incident empty");
 
     private String status;
 

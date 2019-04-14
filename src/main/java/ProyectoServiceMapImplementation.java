@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -73,7 +74,7 @@ public class ProyectoServiceMapImplementation implements ProyectoService{
     @Override
     public boolean deleteProyecto(Integer id) throws ProyectoException {
         if (proyectoExist(id)){
-            if (proyectoHashMap.get(id).getIncidentes() == null){
+            if (proyectoHashMap.get(id).getIncidentes().isEmpty()){
                 return proyectoHashMap.remove(id) != null;
             }
             else{
@@ -89,4 +90,28 @@ public class ProyectoServiceMapImplementation implements ProyectoService{
     public boolean proyectoExist(Integer id) {
         return proyectoHashMap.containsKey(id);
     }
+
+    @Override
+    public Collection<Proyecto> getProyectoUsuarioPropietario(Integer id) throws ProyectoException{
+        HashMap<Integer, Proyecto> proyectos = new HashMap<>();
+        for(int i=0; i < proyectoHashMap.size(); i++){
+            if (proyectoHashMap.get(i).getPropietario().getId().intValue() == id){
+                System.out.println(i);
+                proyectos.put(i, proyectoHashMap.get(i));
+            }
+        }
+        if (proyectos.isEmpty()){
+            throw new ProyectoException("NO_USER");
+        }
+        return proyectos.values();
+    }
+
+    @Override
+    public Collection<Incidente> getIncidentesProyecto(Integer id) throws ProyectoException{
+        if(proyectoHashMap.get(id).getIncidentes().isEmpty()){
+            throw new ProyectoException("NO_INCIDENT");
+        }
+        return proyectoHashMap.get(id).getIncidentes();
+    }
+
 }

@@ -1,4 +1,6 @@
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
 import java.util.Date;
 import static spark.Spark.*;
 
@@ -100,12 +102,16 @@ public class GestorIncidencias {
         delete("/usuario/:id", (request, response) -> {
             response.type("application/json");
             try{
-                usuarioService.deleteUsuario(new Integer(request.params(":id")));
-                return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS));
+                usuarioService.deleteUsuario(new Integer(request.params(":id")), incidenteService, proyectoService);
+                return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS, "Usuario eliminado"));
             }
             catch (UsuarioException e){
                 if(e.getMessage().equals("NOT_EXIST")){
-                    return new Gson().toJson(new StandardResponse(StatusResponse.NOT_EXIST));
+                    return new Gson().toJson(new StandardResponse(StatusResponse.NOT_EXIST, "ID no existe"));
+                }
+                else if(e.getMessage().equals("NOT_REMOVE")){
+                    return new Gson().toJson(new StandardResponse(StatusResponse.NOT_REMOVE,
+                            "No se puede eliminar el usuario"));
                 }
                 return new Gson().toJson(new StandardResponse(StatusResponse.ERROR));
             }
@@ -278,18 +284,18 @@ public class GestorIncidencias {
         });
 
         // Cambiar estado
-        put("/incidente/:id", (request, response) -> {
+        put("/incidente/estado/:id", (request, response) -> {
             response.type("application/json");
-            Incidente incidenteEdit = new Gson().fromJson(response.body(), Incidente.class);
+            Incidente incidente = new Gson().fromJson(response.body(), Incidente.class);
             try {
-                incidenteService.changeEstado(incidenteEdit);
+                Incidente incidenteEdit = incidenteService.changeEstado(incidente);
                 return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
-                        new Gson().toJsonTree(incidenteService.getIncidente(new Integer(request.params(":id"))))));
+                        new Gson().toJsonTree(incidenteService.getIncidente(incidenteEdit.getId()))));
             }
             catch (IncidenteException e){
                 if(e.getMessage().equals("ESTADO_ERROR")) {
                     return new Gson().toJson(new StandardResponse(StatusResponse.ESTADO_ERROR,
-                            "Estado invalido"));
+                            "Estado invalido. Solo puede cambiarse a RESUELTO"));
                 }
                 else if (e.getMessage().equals("NOT_EXIST")){
                     return new Gson().toJson(new StandardResponse(StatusResponse.NOT_EXIST,
@@ -300,11 +306,11 @@ public class GestorIncidencias {
         });
 
         // Cambiar descripcion
-        put("/incidente/:id", (request, response) -> {
+        put("/incidente/descripcion/:id", (request, response) -> {
             response.type("application/json");
-            Incidente incidenteEdit = new Gson().fromJson(response.body(), Incidente.class);
+            Incidente incidente = new Gson().fromJson(response.body(), Incidente.class);
             try {
-                incidenteService.editDescripcion(incidenteEdit);
+                incidenteService.editDescripcion(incidente);
                 return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
                         new Gson().toJsonTree(incidenteService.getIncidente(new Integer(request.params(":id"))))));
             }
@@ -321,26 +327,87 @@ public class GestorIncidencias {
         // GENERALES
         // Proyectos con usuario como propietario
         get("/proyectos/propietario/:id", (request, response) -> {
-            return null;
+            response.type("application/json");
+            try{
+                return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
+                        new Gson().toJsonTree(proyectoService.getProyectoUsuarioPropietario(
+                                new Integer(request.params(":id"))))));
+            }
+            catch (ProyectoException e){
+                if (e.getMessage().equals("NO_USER")){
+                    return new Gson().toJson(new StandardResponse(StatusResponse.USUARIO_ERROR,
+                            "No hay proyectos con el usuario como propietario"));
+                }
+                return new Gson().toJson(new StandardResponse(StatusResponse.ERROR));
+            }
         });
 
         // Incidentes asignados a un usuario
         get("/incidentes/responsable/:id", (request, response) -> {
-            return null;
+            response.type("application/json");
+            try{
+                return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
+                        new Gson().toJsonTree(incidenteService.getIncidentesResponsable(
+                                new Integer(request.params(":id"))))));
+            }
+            catch (IncidenteException e){
+                if(e.getMessage().equals("USUARIO_ERROR")){
+                    return new Gson().toJson(new StandardResponse(StatusResponse.USUARIO_ERROR,
+                            "El usuario no es responsable de ningun incidente"));
+                }
+                return new Gson().toJson(new StandardResponse(StatusResponse.ERROR));
+            }
         });
 
         // Incidentes creados por un usuario
         get("/incidentes/reportador/:id", (request, response) -> {
-            return null;
-        });
+            response.type("application/json");
+            try{
+                return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
+                        new Gson().toJsonTree(incidenteService.getIncidentesReportador(
+                                new Integer(request.params(":id"))))));
+            }
+            catch (IncidenteException e){
+                if(e.getMessage().equals("USUARIO_ERROR")){
+                    return new Gson().toJson(new StandardResponse(StatusResponse.USUARIO_ERROR,
+                            "El usuario no es creador de ningun incidente"));
+                }
+                return new Gson().toJson(new StandardResponse(StatusResponse.ERROR));
+            }        });
 
         // Incidentes abiertos y cerrados
         get("/incidentes/:estado", (request, response) -> {
-            return null;
+            response.type("application/json");
+            try{
+                return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
+                        new Gson().toJsonTree(incidenteService.getIncidentesAsignado(request.params(":estado")))));
+            }
+            catch (IncidenteException e){
+                if(e.getMessage().equals("ESTADO_ERROR")){
+                    return new Gson().toJson(new StandardResponse(StatusResponse.ESTADO_ERROR,
+                            "No hay incidentes abiertos"));
+                }
+                return new Gson().toJson(new StandardResponse(StatusResponse.ERROR));
+            }
         });
 
         // Incidentes asociados a un proyecto
+        get("/incidentes/proyecto/:id", (request, response) -> {
+            response.type("application/json");
+            try{
+                return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
+                        new Gson().toJsonTree(proyectoService.getIncidentesProyecto(
+                                new Integer(request.params(":id"))))));
+            }
+            catch (ProyectoException e){
+                if (e.getMessage().equals("NO_INCIDENT")) {
+                    return new Gson().toJson(new StandardResponse(StatusResponse.NO_INCIDENT,
+                            "El proyecto no tiene incidentes"));
+                }
+                return new Gson().toJson(new StandardResponse(StatusResponse.ERROR));
+            }
 
+        });
     }
 
     private static void init(UsuarioService usuarioService, ProyectoService proyectoService,

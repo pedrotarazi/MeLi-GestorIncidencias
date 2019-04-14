@@ -68,8 +68,24 @@ public class UsuarioServiceMapImplementation implements UsuarioService {
     }
 
     @Override
-    public void deleteUsuario(Integer id) throws UsuarioException{
+    public void deleteUsuario(Integer id, IncidenteService incidentes, ProyectoService proyectos)
+            throws UsuarioException, ProyectoException, IncidenteException {
         if (usuarioExist(id)) {
+            if (proyectos != null) {
+                for (int i = 0; i < proyectos.getProyectos().size(); i++) {
+                    if (proyectos.getProyecto(i).getPropietario().getId().intValue() == id){
+                        throw new UsuarioException("NOT_REMOVE");
+                    }
+                }
+            }
+            if (incidentes != null){
+                for (int i = 0; i < incidentes.getIncidentes().size(); i++){
+                    if (incidentes.getIncidente(i).getResponsable().getId().intValue() == id ||
+                            incidentes.getIncidente(i).getReportador().getId().intValue() == id){
+                        throw new UsuarioException("NOT_REMOVE");
+                    }
+                }
+            }
             usuarioHashMap.remove(id);
         }
         else{
