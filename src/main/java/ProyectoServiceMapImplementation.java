@@ -55,6 +55,9 @@ public class ProyectoServiceMapImplementation implements ProyectoService{
         if (proyecto.getId() == null || proyecto.getId() < 0){
             throw new ProyectoException("ID_ERROR");
         }
+        else if (!proyectoExist(proyecto.getId())){
+            throw new ProyectoException("NOT_EXIST");
+        }
         else{
             Proyecto proyectoEditar = proyectoHashMap.get(proyecto.getId());
             if (proyecto.getPropietario() == null || proyecto.getPropietario().equals("")){
@@ -108,10 +111,15 @@ public class ProyectoServiceMapImplementation implements ProyectoService{
 
     @Override
     public Collection<Incidente> getIncidentesProyecto(Integer id) throws ProyectoException{
-        if(proyectoHashMap.get(id).getIncidentes().isEmpty()){
-            throw new ProyectoException("NO_INCIDENT");
+        if (proyectoExist(id)) {
+            if (proyectoHashMap.get(id).getIncidentes().isEmpty()) {
+                throw new ProyectoException("NO_INCIDENT");
+            }
+            return proyectoHashMap.get(id).getIncidentes();
         }
-        return proyectoHashMap.get(id).getIncidentes();
+        else{
+            throw new ProyectoException("NO_PROJECT");
+        }
     }
 
 }

@@ -12,7 +12,8 @@ public enum StatusResponse {
     ESTADO_ERROR ("Estado invald"),
     DATE_ERROR ("Date invalid"),
     USUARIO_ERROR ("Usuario invalid"),
-    NO_INCIDENT ("Incident empty");
+    NO_INCIDENT ("Incidente empty"),
+    NO_PROJECT ("Proyecto invalido");
 
     private String status;
 

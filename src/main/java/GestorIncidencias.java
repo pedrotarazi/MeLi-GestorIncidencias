@@ -165,8 +165,8 @@ public class GestorIncidencias {
                 if (e.getMessage().equals("ID_ERROR")){
                     return new Gson().toJson(new StandardResponse(StatusResponse.ID_ERROR, "ID invalido"));
                 }
-                else if (e.getMessage().equals("NO_EXIST")) {
-                    return new Gson().toJson(new StandardResponse(StatusResponse.NAME_ERROR,
+                else if (e.getMessage().equals("NOT_EXIST")) {
+                    return new Gson().toJson(new StandardResponse(StatusResponse.NOT_EXIST,
                             "EL proyecto no existe"));
                 }
                 return new Gson().toJson(new StandardResponse(StatusResponse.ERROR));
@@ -180,11 +180,15 @@ public class GestorIncidencias {
             try{
                 Proyecto proyectoEdit = proyectoService.editProyecto(proyecto);
                 return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
-                        new Gson().toJson(proyectoEdit)));
+                        new Gson().toJsonTree(proyectoEdit)));
             }
             catch(ProyectoException e){
                 if (e.getMessage().equals("ID_ERROR")){
                     return new Gson().toJson(new StandardResponse(StatusResponse.ID_ERROR, "ID invalido"));
+                }
+                else if (e.getMessage().equals("NOT_EXIST")){
+                    return new Gson().toJson(new StandardResponse(StatusResponse.NOT_EXIST,
+                            "El proyecto a editar no existe"));
                 }
                 else if (e.getMessage().equals("NAME_ERROR")) {
                     return new Gson().toJson(new StandardResponse(StatusResponse.NAME_ERROR,
@@ -223,7 +227,7 @@ public class GestorIncidencias {
         // Crear incidente
         post("/incidente", (request, response) -> {
             response.type("application/json");
-            Incidente incidente = new Gson().fromJson(response.body(), Incidente.class);
+            Incidente incidente = new Gson().fromJson(request.body(), Incidente.class);
             try{
                 incidenteService.addIncidente(incidente);
                 return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS));
@@ -286,11 +290,11 @@ public class GestorIncidencias {
         // Cambiar estado
         put("/incidente/estado/:id", (request, response) -> {
             response.type("application/json");
-            Incidente incidente = new Gson().fromJson(response.body(), Incidente.class);
+            Incidente incidente = new Gson().fromJson(request.body(), Incidente.class);
             try {
-                Incidente incidenteEdit = incidenteService.changeEstado(incidente);
+                Incidente incidenteEdit = incidenteService.changeEstado(new Integer(request.params(":id")), incidente);
                 return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
-                        new Gson().toJsonTree(incidenteService.getIncidente(incidenteEdit.getId()))));
+                        new Gson().toJsonTree(incidenteService.getIncidente(new Integer(incidenteEdit.getId())))));
             }
             catch (IncidenteException e){
                 if(e.getMessage().equals("ESTADO_ERROR")) {
@@ -308,9 +312,9 @@ public class GestorIncidencias {
         // Cambiar descripcion
         put("/incidente/descripcion/:id", (request, response) -> {
             response.type("application/json");
-            Incidente incidente = new Gson().fromJson(response.body(), Incidente.class);
+            Incidente incidente = new Gson().fromJson(request.body(), Incidente.class);
             try {
-                incidenteService.editDescripcion(incidente);
+                incidenteService.editDescripcion(new Integer(request.params(":id")), incidente);
                 return new Gson().toJson(new StandardResponse(StatusResponse.SUCCESS,
                         new Gson().toJsonTree(incidenteService.getIncidente(new Integer(request.params(":id"))))));
             }
@@ -404,9 +408,12 @@ public class GestorIncidencias {
                     return new Gson().toJson(new StandardResponse(StatusResponse.NO_INCIDENT,
                             "El proyecto no tiene incidentes"));
                 }
+                else if (e.getMessage().equals("NO_PROJECT")){
+                    return new Gson().toJson(new StandardResponse(StatusResponse.NO_PROJECT,
+                            "No existe el proyecto elegido"));
+                }
                 return new Gson().toJson(new StandardResponse(StatusResponse.ERROR));
             }
-
         });
     }
 

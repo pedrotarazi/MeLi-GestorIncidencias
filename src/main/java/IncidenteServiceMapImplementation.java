@@ -59,26 +59,26 @@ public class IncidenteServiceMapImplementation implements IncidenteService{
     }
 
     @Override
-    public Incidente changeEstado(Incidente incidente) throws IncidenteException {
-        if (incidente.getEstado() == null || (incidente.getEstado() != Estado.RESUELTO)) {
-            throw new IncidenteException("ESTADO_ERROR");
-        }
-        else if (!incidenteExist(incidente.getId())){
+    public Incidente changeEstado(Integer id, Incidente incidente) throws IncidenteException {
+        if (!incidenteExist(id)){
             throw new IncidenteException("NOT_EXIST");
         }
+        else if (incidente.getEstado() == null || (!incidente.getEstado().getEstado().equals(Estado.RESUELTO.getEstado()))) {
+            throw new IncidenteException("ESTADO_ERROR");
+        }
         else{
-            Incidente incidenteEdit = incidenteHashMap.get(incidente.getId());
+            Incidente incidenteEdit = incidenteHashMap.get(id);
             incidenteEdit.setEstado(incidente.getEstado());
             return incidenteEdit;
         }
     }
 
     @Override
-    public void editDescripcion(Incidente incidente) throws IncidenteException{
+    public void editDescripcion(Integer id, Incidente incidente) throws IncidenteException{
         if (incidente.getDescripcion() == null){
             throw new IncidenteException("NAME_ERROR");
         }
-        incidenteHashMap.get(incidente.getId()).setDescripcion(incidente.getDescripcion());
+        incidenteHashMap.get(id).setDescripcion(incidente.getDescripcion());
     }
 
     @Override
